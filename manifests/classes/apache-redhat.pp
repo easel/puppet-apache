@@ -14,12 +14,12 @@ class apache::redhat inherits apache::base {
 
   File["logrotate configuration"] { 
     path => "/etc/logrotate.d/httpd",
-    source => "puppet:///apache/etc/logrotate.d/httpd",
+    source => "puppet:///modules/apache/etc/logrotate.d/httpd",
   }
 
   File["default status module configuration"] {
     path => "${apache::params::conf}/conf.d/status.conf",
-    source => "puppet:///apache/etc/httpd/conf/status.conf",
+    source => "puppet:///modules/apache/etc/httpd/conf/status.conf",
   }
 
   File["default virtualhost"] { 
@@ -34,7 +34,7 @@ class apache::redhat inherits apache::base {
     mode => 755,
     owner => "root",
     group => "root",
-    source => "puppet:///apache/usr/local/sbin/a2X.redhat",
+    source => "puppet:///modules/apache/usr/local/sbin/a2X.redhat",
   }
 
   file { [
@@ -64,8 +64,8 @@ class apache::redhat inherits apache::base {
   file { "${apache::params::conf}/mods-available":
     ensure => directory,
     source => $lsbmajdistrelease ? {
-      5 => "puppet:///apache//etc/httpd/mods-available/redhat5/",
-      6 => "puppet:///apache//etc/httpd/mods-available/redhat6/",
+      5 => "puppet:///modules/apache//etc/httpd/mods-available/redhat5/",
+      6 => "puppet:///modules/apache//etc/httpd/mods-available/redhat6/",
     },
     recurse => true,
     mode => 644,
