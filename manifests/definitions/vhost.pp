@@ -51,7 +51,11 @@ define apache::vhost (
   } else {
 
     exec { "disable default virtual host from ${name}":
-      command => "a2dissite default",
+      command => $operatingsystem ? {
+	RedHat => "/usr/local/sbin/a2dissite ${name}",
+	CentOS => "/usr/local/sbin/a2dissite ${name}",
+	default => "/usr/sbin/a2dissite ${name}"
+      },
       onlyif  => "test -L ${apache::params::conf}/sites-enabled/000-default",
       notify  => Exec["apache-graceful"],
       require => Package["apache"],
@@ -286,7 +290,11 @@ define apache::vhost (
 
    disabled: {
       exec { "disable vhost ${name}":
-        command => "a2dissite ${name}",
+        command => $operatingsystem ? {
+          RedHat => "/usr/local/sbin/a2dissite ${name}",
+          CentOS => "/usr/local/sbin/a2dissite ${name}",
+          default => "/usr/sbin/a2dissite ${name}"
+        },
         notify  => Exec["apache-graceful"],
         require => Package[$apache::params::pkg],
         onlyif => "/bin/sh -c '[ -L ${apache::params::conf}/sites-enabled/${name} ] \\
