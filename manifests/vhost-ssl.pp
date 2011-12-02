@@ -54,7 +54,7 @@ Parameters:
   If set to a path, the CSR will be copied into the specified file. Defaults to
   "false", which means don't copy the CSR anywhere.
 - *$sslonly*: if set to "true", only the https virtualhost will be configured.
-  Defaults to "true", which means the virtualhost will be reachable unencrypted
+  Defaults to "false", which means the virtualhost will be reachable unencrypted
   on port 80, as well as encrypted on port 443.
 - *ports*: array specifying the ports on which the non-SSL vhost will be
   reachable. Defaults to "*:80".
@@ -85,8 +85,8 @@ Example usage:
   apache::vhost-ssl { "bar.example.com":
     ensure => present,
     ip_address => "10.0.0.3",
-    cert => "puppet:///exampleproject/ssl-certs/bar.example.com.crt",
-    certchain => "puppet:///exampleproject/ssl-certs/quovadis.chain.crt",
+    cert => "puppet:///modules/exampleproject/ssl-certs/bar.example.com.crt",
+    certchain => "puppet:///modules/exampleproject/ssl-certs/quovadis.chain.crt",
     publish_csr => true,
     sslonly => true,
   }
@@ -159,7 +159,7 @@ define apache::vhost-ssl (
     $cacertfile = "${apache::params::root}/$name/ssl/cacert.crt"
   } else {
     $cacertfile = $operatingsystem ? {
-      RedHat => "/etc/pki/tls/certs/ca-bundle.crt",
+      /RedHat|CentOS/ => "/etc/pki/tls/certs/ca-bundle.crt",
       Debian => "/etc/ssl/certs/ca-certificates.crt",
     }
   }

@@ -5,9 +5,12 @@ class apache::params {
     /Debian|Ubuntu/ => 'apache2',
   }
 
-  $root = $operatingsystem ? {
-    /RedHat|CentOS/ => '/var/www/vhosts',
-    /Debian|Ubuntu/ => '/var/www',
+  $root = $apache_root ? {
+    "" => $operatingsystem ? {
+      /RedHat|CentOS/ => '/var/www/vhosts',
+      /Debian|Ubuntu/ => '/var/www',
+    },
+    default => $apache_root
   }
 
   $user = $operatingsystem ? {
@@ -20,14 +23,19 @@ class apache::params {
     /Debian|Ubuntu/ => '/etc/apache2',
   }
 
-  $cgi = $operatingsystem ? {
-    /RedHat|CentOS/ => '/var/www/cgi-bin',
-    /Debian|Ubuntu/ => '/usr/lib/cgi-bin',
-  }
-
   $log = $operatingsystem ? {
     /RedHat|CentOS/ => '/var/log/httpd',
     /Debian|Ubuntu/ => '/var/log/apache2',
+  }
+
+  $access_log = $operatingsystem ? {
+    /RedHat|CentOS/ => "${log}/access_log",
+    /Debian|Ubuntu/ => "${log}/access.log",
+  }
+
+  $error_log = $operatingsystem ? {
+    /RedHat|CentOS/ => "${log}/error_log",
+    /Debian|Ubuntu/ => "${log}/error.log",
   }
 
 }

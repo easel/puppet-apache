@@ -17,14 +17,14 @@ class apache::debian inherits apache::base {
     path => "${apache::params::conf}/mods-available/status.conf",
     source => "puppet:///modules/apache/etc/apache2/mods-available/status.conf",
   }
-
-  File["default virtualhost"] {
-    path => "${apache::params::conf}/sites-available/default",
-    content => template("apache/default-vhost.debian"),
-  }
   # END inheritance from apache::base
 
-  package { "apache2-mpm-prefork":
+  $mpm_package = $apache_mpm_type ? {
+    "" => "apache2-mpm-prefork",
+    default => "apache2-mpm-${apache_mpm_type}",
+  }
+
+  package { "${mpm_package}":
     ensure  => installed,
     require => Package["apache"],
   }
