@@ -16,9 +16,13 @@
   Include <%= wwwroot %>/<%= name%>/conf/*.conf
 
   SSLEngine On
+<% if sslproxy -%>
+  SSLProxyEngine On
+<% end -%>
   SSLCertificateFile <%= certfile %>
   SSLCertificateKeyFile <%= certkeyfile %>
   SSLCACertificateFile <%= cacertfile %>
+
 <% if has_variable?("certchainfile") -%>
   SSLCertificateChainFile <%= certchainfile %>
 <% end -%>
@@ -29,6 +33,10 @@
     Options +ExecCGI
     AddHandler cgi-script .cgi
   </Directory>
+<% end -%>
+
+<% if proxypreservehost -%>
+  ProxyPreserveHost On
 <% end -%>
 
   ServerSignature Off

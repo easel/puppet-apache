@@ -31,8 +31,6 @@ Parameters:
 - *$aliases*: see apache::vhost. The generated SSL certificate will have this
   list as DNS subjectAltName entries.
 - *$enable_default*: see apache::vhost
-- *$ip_address*: the ip address defined in the <VirtualHost> directive.
-  Defaults to "*".
 - *$cert*: optional source URL of the certificate (see examples below), if the
   default self-signed generated one doesn't suit. This the certificate passed
   to the SSLCertificateFile directive.
@@ -60,6 +58,7 @@ Parameters:
   reachable. Defaults to "*:80".
 - *sslports*: array specifying the ports on which the SSL vhost will be
   reachable. Defaults to "*:443".
+- *sslproxy*: if set to true, enables ssl proxy support for this vhost. defaults to false
 - *accesslog_format*: format string for access logs. Defaults to "combined".
 
 Requires:
@@ -76,7 +75,7 @@ Example usage:
 
   apache::vhost-ssl { "foo.example.com":
     ensure => present,
-    ip_address => "10.0.0.2",
+    sslports => ["10.0.0.2:443"],
     publish_csr => "/home/webmaster/foo.example.com.csr",
     days="30",
   }
@@ -84,7 +83,7 @@ Example usage:
   # go to https://bar.example.com/bar.example.com.csr to retrieve the CSR.
   apache::vhost-ssl { "bar.example.com":
     ensure => present,
-    ip_address => "10.0.0.3",
+    sslports => ["10.0.0.3:443"],
     cert => "puppet:///modules/exampleproject/ssl-certs/bar.example.com.crt",
     certchain => "puppet:///modules/exampleproject/ssl-certs/quovadis.chain.crt",
     publish_csr => true,
@@ -100,13 +99,13 @@ define apache::vhost-ssl (
   $conf=false,
   $readme=false,
   $docroot=false,
-  $cgibin=true,
+  $cgibin=false,
+  $proxypreservehost=true,
   $user="",
   $admin=$admin,
   $group="root",
   $mode=2570,
   $aliases=[],
-  $ip_address="*",
   $cert=false,
   $certkey=false,
   $cacert=false,
@@ -118,6 +117,7 @@ define apache::vhost-ssl (
   $enable_default=true,
   $ports=['*:80'],
   $sslports=['*:443'],
+  $sslproxy=false,
   $accesslog_format="combined"
 ) {
 

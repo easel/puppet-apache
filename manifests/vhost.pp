@@ -6,7 +6,8 @@ define apache::vhost (
   $conf=false,
   $readme=false,
   $docroot=false,
-  $cgibin=true,
+  $cgibin=false,
+  $proxypreservehost=true,
   $user="",
   $admin="",
   $group="root",
@@ -42,7 +43,11 @@ define apache::vhost (
   if $enable_default == true {
 
     exec { "enable default virtual host from ${name}":
-      command => "a2ensite default",
+      command => $operatingsystem ? {
+	RedHat => "/usr/local/sbin/a2ensite default",
+	CentOS => "/usr/local/sbin/a2ensite default",
+	default => "/usr/sbin/a2ensite default"
+      },
       unless  => "test -L ${apache::params::conf}/sites-enabled/000-default",
       notify  => Exec["apache-graceful"],
       require => Package["apache"],
