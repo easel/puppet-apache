@@ -1,0 +1,7 @@
+# file managed by puppet
+
+<Location <%= location %>>
+	SSLVerifyClient optional
+        SSLRequire %{SSL_CLIENT_VERIFY} eq "SUCCESS" 
+	SSLVerifyDepth 10
+</Location>

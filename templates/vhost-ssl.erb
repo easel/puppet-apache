@@ -23,6 +23,13 @@
   SSLCertificateKeyFile <%= certkeyfile %>
   SSLCACertificateFile <%= cacertfile %>
 
+<% if clientcertsenabled -%>
+  SSLVerifyClient optional 
+  SSLVerifyDepth 3
+  SSLUserName SSL_CLIENT_S_DN_Email
+  #SSLCARevocationFile /etc/ssl/ca.crl 
+<% end -%>
+
 <% if has_variable?("certchainfile") -%>
   SSLCertificateChainFile <%= certchainfile %>
 <% end -%>

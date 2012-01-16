@@ -111,6 +111,7 @@ define apache::vhost-ssl (
   $cacert=false,
   $certchain=false,
   $certcn=false,
+  $clientcertsenabled=false,
   $days="3650",
   $publish_csr=false,
   $sslonly=false,
