@@ -5,6 +5,7 @@
     Allow from all
 </Proxy>
 
-ProxyPass <%= location %> <%= url -%> <%= params.join(' ') %>
 ProxyPassReverse <%= location %> <%= url %>
 
+RewriteEngine On
+RewriteRule <%= location %>(.*)  <%= url %>$1 [P,L]
