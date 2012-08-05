@@ -1,5 +1,5 @@
 class apache::redhat inherits apache::base {
-
+  require yum
   include apache::params
   
   # BEGIN inheritance from apache::base
@@ -9,7 +9,12 @@ class apache::redhat inherits apache::base {
   }
 
   Package["apache"] {
-    require => [File["/usr/local/sbin/a2ensite"], File["/usr/local/sbin/a2dissite"], File["/usr/local/sbin/a2enmod"], File["/usr/local/sbin/a2dismod"], Package['redhat-lsb']],
+    require => [
+        File["/usr/local/sbin/a2ensite"], 
+        File["/usr/local/sbin/a2dissite"], 
+        File["/usr/local/sbin/a2enmod"], 
+        File["/usr/local/sbin/a2dismod"], 
+    ],
   }
 
   # $httpd_pid_file is used in template logrotate-httpd.erb
