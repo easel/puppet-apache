@@ -50,7 +50,15 @@ define apache::vhost (
       },
       unless  => "test -L ${apache::params::conf}/sites-enabled/000-default",
       notify  => Exec["apache-graceful"],
-      require => Package["apache"],
+      require => [Class["apache"],
+                  File["${apache::params::conf}/sites-available/${name}",
+                       "${apache::params::conf}/sites-enabled",
+                       "${apache::params::root}/${name}/htdocs",
+                       "${apache::params::root}/${name}/logs",
+                       "${apache::params::root}/${name}/conf",
+                       "default virtualhost"
+                      ]
+                 ]
     }
 
   } else {
@@ -63,7 +71,7 @@ define apache::vhost (
       },
       onlyif  => "test -L ${apache::params::conf}/sites-enabled/000-default",
       notify  => Exec["apache-graceful"],
-      require => Package["apache"],
+      require => Class["apache"],
     }
   }
 
@@ -79,7 +87,7 @@ define apache::vhost (
           CentOS => "httpd_config_t",
           default => undef,
         },
-        require => Package[$apache::params::pkg],
+        require => Package[$apache::params::pkg], 
         notify  => Exec["apache-graceful"],
       }
 
@@ -250,10 +258,11 @@ define apache::vhost (
           redhat => File["/usr/local/sbin/a2ensite"],
           CentOS => File["/usr/local/sbin/a2ensite"],
           default => Package[$apache::params::pkg]},
-          File["${apache::params::conf}/sites-available/${name}"],
-          File["${apache::params::root}/${name}/htdocs"],
-          File["${apache::params::root}/${name}/logs"],
-          File["${apache::params::root}/${name}/conf"]
+          File["${apache::params::conf}/sites-available/${name}",
+               "${apache::params::conf}/sites-enabled",
+               "${apache::params::root}/${name}/htdocs",
+               "${apache::params::root}/${name}/logs",
+               "${apache::params::root}/${name}/conf"]
         ],
         unless  => "/bin/sh -c '[ -L ${apache::params::conf}/sites-enabled/${name} ] \\
           && [ ${apache::params::conf}/sites-enabled/${name} -ef ${apache::params::conf}/sites-available/${name} ]'",

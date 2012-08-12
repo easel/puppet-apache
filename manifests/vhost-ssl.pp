@@ -121,6 +121,7 @@ define apache::vhost-ssl (
   $sslproxy=false,
   $accesslog_format="combined"
 ) {
+  require apache, apache::ssl
 
   # these 2 values are required to generate a valid SSL certificate.
   if (!$sslcert_country) { $sslcert_country = "??" }
