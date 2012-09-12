@@ -13,7 +13,7 @@ class apache::security {
         content => "# file managed by puppet
 
 <IfModule mod_security2.c>
-  Include modsecurity.d/modsecurity_localrules.conf
+  Include modsecurity.d/*.conf
 </IfModule>
 ",
         require => Package["mod_security"],
