@@ -46,14 +46,7 @@ define apache::proxypass (
   $fname = regsubst($name, "\s", "_", "G")
 
   include apache::params
-
-  if defined(Apache::Module["proxy"]) {} else {
-    apache::module {"proxy": }
-  }
-
-  if defined(Apache::Module["proxy_http"]) {} else {
-    apache::module {"proxy_http": }
-  }
+  include apache::reverseproxy
 
   file { "${name} proxypass on ${vhost}":
     ensure => $ensure,
