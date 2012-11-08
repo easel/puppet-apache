@@ -72,6 +72,7 @@ Example usage:
   $sslcert_organisation="Snake Oil, Ltd."
 
   include apache::ssl
+  include apache::headers
 
   apache::vhost-ssl { "foo.example.com":
     ensure => present,
