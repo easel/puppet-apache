@@ -71,9 +71,6 @@ Example usage:
   $sslcert_locality="San Francisco"
   $sslcert_organisation="Snake Oil, Ltd."
 
-  include apache::ssl
-  include apache::headers
-
   apache::vhost-ssl { "foo.example.com":
     ensure => present,
     sslports => ["10.0.0.2:443"],
@@ -122,7 +119,7 @@ define apache::vhost-ssl (
   $sslproxy=false,
   $accesslog_format="combined"
 ) {
-  require apache, apache::ssl
+  require apache, apache::ssl, apache::headers
 
   # these 2 values are required to generate a valid SSL certificate.
   if (!$sslcert_country) { $sslcert_country = "??" }
