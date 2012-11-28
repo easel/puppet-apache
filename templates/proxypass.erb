@@ -3,7 +3,7 @@
 <Proxy <%= url %>*>
     Order deny,allow
     Allow from all
-    ProxySet connectiontimeout=2 timeout=600 keepalive=On retry=5
+    ProxySet timeout=600 keepalive=On retry=5
 </Proxy>
 
 ProxyPassReverse <%= location %> <%= url %>
