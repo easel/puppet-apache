@@ -57,7 +57,7 @@ define apache::proxypass (
       default  => undef,
     },
     name    => $filename ? {
-      ""      => "${apache::params::root}/${vhost}/conf/proxypass-${fname}.conf",
+      ""      => "${apache::params::root}/${vhost}/conf/rewrite-${fname}.conf",
       default => "${apache::params::root}/${vhost}/conf/${filename}",
     },
     notify  => Exec["apache-graceful"],

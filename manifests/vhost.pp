@@ -110,6 +110,9 @@ define apache::vhost (
           "" => $wwwuser,
           default => $admin,
         },
+      	recurse => true,
+      	purge   => true,
+      	ignore  => '\.ignore',
         group  => $group,
         mode   => $mode,
         seltype => $operatingsystem ? {
