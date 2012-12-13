@@ -95,6 +95,12 @@ class apache::base {
     mode    => 644,
   }
 
+  exec { "apache-restart":
+    command => undef,
+    refreshonly => true,
+    onlyif => undef,
+  }
+
   exec { "apache-graceful":
     command => undef,
     refreshonly => true,

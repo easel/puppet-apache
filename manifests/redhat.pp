@@ -12,6 +12,11 @@ class apache::redhat inherits apache::base {
     onlyif  => "apachectl configtest",
   }
 
+  Exec["apache-restart"] {
+    command => "apachectl restart",
+    onlyif  => "apachectl configtest",
+  }
+
   Package["apache"] {
     require => File["/usr/local/sbin/a2ensite", 
                     "/usr/local/sbin/a2dissite", 
@@ -58,7 +63,7 @@ class apache::redhat inherits apache::base {
   augeas { "select httpd mpm ${httpd_mpm}":
     changes => "set /files/etc/sysconfig/httpd/HTTPD /usr/sbin/${httpd_mpm}",
     require => Package["apache"],
-    notify  => Service["apache"],
+    notify  => [Service["apache"],Exec['apache-restart']],
   }
 
   file { [
