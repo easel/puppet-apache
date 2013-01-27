@@ -21,6 +21,7 @@ LoadModule ssl_module modules/mod_ssl.so
 #
 #   Some MIME-types for downloading Certificates and CRLs
 #
+AddType application/x-x509-ca-cert .cer
 AddType application/x-x509-ca-cert .crt
 AddType application/x-pkcs7-crl    .crl
 
@@ -96,7 +97,7 @@ SSLProtocol all -SSLv2
 #   SSL Cipher Suite:
 # List the ciphers that the client is permitted to negotiate.
 # See the mod_ssl documentation for a complete list.
-SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+SSLCipherSuite HIGH:!aNULL:!MD5
 
 #   Server Certificate:
 # Point SSLCertificateFile at a PEM encoded certificate.  If
