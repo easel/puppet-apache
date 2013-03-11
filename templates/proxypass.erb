@@ -9,4 +9,4 @@
 ProxyPassReverse <%= location %> <%= url %>
 
 RewriteEngine On
-RewriteRule <%= location %>(.*)  <%= url %>$1 [P,L]
+RewriteRule ^<%= location %>(.*)  <%= url %>$1 [P,L]
